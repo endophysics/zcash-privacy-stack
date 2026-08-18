@@ -1,0 +1,25 @@
+format_version = 1
+
+[components.zakura]
+repository = "https://github.com/endophysics/zakura.git"
+upstream = "https://github.com/zakura-core/zakura.git"
+revision = "5140c6e23e7218133071e2e8b9e6d90e47a54e6c"
+upstream_base = "5140c6e23e7218133071e2e8b9e6d90e47a54e6c"
+path = "../zakura"
+required = true
+
+[components.gateway]
+path = "../zcash-private-gateway"
+required = false
+
+[components.zaino]
+path = "../zaino"
+required = false
+
+[components.wallet]
+path = "../wallet-sdk"
+required = false
+
+[components.zebra]
+path = "../zebra"
+required = false
