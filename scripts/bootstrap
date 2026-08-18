@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+
+from pathlib import Path
+import sys
+
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts.component_bootstrap import BootstrapError, bootstrap_lock_file, render_bootstrap
+from scripts.component_lock import ComponentLockError
+
+
+def main() -> int:
+    try:
+        results = bootstrap_lock_file(Path.cwd() / "components.lock.toml")
+    except (BootstrapError, ComponentLockError) as error:
+        print(error, file=sys.stderr)
+        return 1
+    print(render_bootstrap(results))
+    return 0
+
+
+raise SystemExit(main())
