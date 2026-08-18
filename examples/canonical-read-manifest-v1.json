@@ -1,0 +1,36 @@
+{
+  "format_version": "1.0.0",
+  "network": "testnet",
+  "generation": 1,
+  "generated_at": "2026-06-01T00:00:00Z",
+  "chain_tip_height": 299,
+  "chain_tip_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "objects": [
+    {
+      "kind": "compact_block_range",
+      "id": "100-199",
+      "start_height": 100,
+      "end_height": 199,
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "bytes": 1024,
+      "url": "objects/100-199.bin"
+    },
+    {
+      "kind": "compact_block_range",
+      "id": "200-299",
+      "start_height": 200,
+      "end_height": 299,
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "bytes": 1024,
+      "url": "objects/200-299.bin"
+    },
+    {
+      "kind": "mempool_snapshot",
+      "id": "epoch-60000",
+      "epoch": 60000,
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "bytes": 512,
+      "url": "objects/mempool-epoch-60000.bin"
+    }
+  ]
+}
