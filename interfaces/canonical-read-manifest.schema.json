@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/zcash-privacy/canonical-read-manifest.schema.json",
+  "title": "Zcash Canonical Read Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format_version",
+    "network",
+    "generation",
+    "chain_tip_height",
+    "chain_tip_hash",
+    "objects"
+  ],
+  "properties": {
+    "format_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "network": {
+      "type": "string",
+      "enum": ["mainnet", "testnet", "regtest"]
+    },
+    "generation": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "chain_tip_height": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "chain_tip_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "previous_manifest_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "objects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "id", "sha256", "bytes", "url"],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "compact_block_range",
+              "full_transaction_block",
+              "full_transaction_range",
+              "subtree_roots",
+              "mempool_snapshot",
+              "mempool_delta"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "start_height": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "end_height": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "epoch": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{64}$"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "url": {
+            "type": "string",
+            "format": "uri-reference"
+          }
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "key_id", "value"],
+      "properties": {
+        "algorithm": {"type": "string"},
+        "key_id": {"type": "string"},
+        "value": {"type": "string"}
+      }
+    }
+  }
+}

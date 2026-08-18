@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package zcash.privacy.admission.v1;
+
+// Internal interface between the private gateway and a node adapter.
+// It intentionally exposes no peer, RPC, wallet, or TEE implementation types.
+service PrivateAdmission {
+  rpc Submit(SubmitRequest) returns (SubmitResponse);
+  rpc GetStatus(StatusRequest) returns (StatusResponse);
+  rpc GetCapabilities(CapabilitiesRequest) returns (CapabilitiesResponse);
+}
+
+message SubmitRequest {
+  bytes raw_transaction = 1;
+  string policy_version = 2;
+  bytes idempotency_key = 3;
+  AdmissionOrigin origin = 4;
+}
+
+enum AdmissionOrigin {
+  ADMISSION_ORIGIN_UNSPECIFIED = 0;
+  ADMISSION_ORIGIN_PRIVATE_GATEWAY = 1;
+  ADMISSION_ORIGIN_DEVELOPMENT = 2;
+}
+
+message SubmitResponse {
+  AdmissionStatus status = 1;
+  bytes transaction_id = 2;
+  bytes opaque_receipt = 3;
+  uint64 accepted_unix_ms = 4;
+  uint64 not_before_release_unix_ms = 5;
+  uint64 release_deadline_unix_ms = 6;
+  string policy_version = 7;
+}
+
+enum AdmissionStatus {
+  ADMISSION_STATUS_UNSPECIFIED = 0;
+  ADMISSION_STATUS_ACCEPTED_PRIVATE = 1;
+  ADMISSION_STATUS_ALREADY_ACCEPTED = 2;
+  ADMISSION_STATUS_ALREADY_PUBLIC = 3;
+  ADMISSION_STATUS_REJECTED = 4;
+  ADMISSION_STATUS_RETRY_LATER = 5;
+  ADMISSION_STATUS_POLICY_MISMATCH = 6;
+}
+
+message StatusRequest {
+  bytes opaque_receipt = 1;
+}
+
+message StatusResponse {
+  AdmissionStatus status = 1;
+  bool publicly_released = 2;
+  uint64 release_unix_ms = 3;
+}
+
+message CapabilitiesRequest {}
+
+message CapabilitiesResponse {
+  repeated string supported_policy_versions = 1;
+  repeated string supported_release_modes = 2;
+  uint64 maximum_transaction_bytes = 3;
+  bool private_pool_enabled = 4;
+}

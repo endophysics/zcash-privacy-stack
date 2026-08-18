@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/zcash-privacy/privacy-policy.schema.json",
+  "title": "Zcash Privacy Service Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "policy_version",
+    "service_id",
+    "network",
+    "valid_from",
+    "valid_until",
+    "private_write",
+    "read_privacy"
+  ],
+  "properties": {
+    "policy_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "service_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "network": {
+      "type": "string",
+      "enum": ["mainnet", "testnet", "regtest"]
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["implementation", "revision"],
+      "properties": {
+        "implementation": {
+          "type": "string",
+          "enum": ["zakura", "zebra", "development"]
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 7
+        },
+        "upstream_base": {
+          "type": "string"
+        },
+        "fixed_logical_egress": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "private_write": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "submission_protocol",
+        "padding_bytes",
+        "minimum_delay_ms",
+        "maximum_delay_ms",
+        "release_mode",
+        "direct_fallback_allowed"
+      ],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "submission_protocol": {
+          "type": "string",
+          "enum": ["ohttp-zcash-tx-v1", "development-direct-v1"]
+        },
+        "padding_bytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 1048576
+        },
+        "minimum_delay_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maximum_delay_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "epoch_ms": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "release_mode": {
+          "type": "string",
+          "enum": ["immediate", "fixed_epoch", "rolling_pool"]
+        },
+        "relay_set_id": {
+          "type": "string"
+        },
+        "gateway_key_id": {
+          "type": "string"
+        },
+        "attestation_required": {
+          "type": "boolean",
+          "default": false
+        },
+        "direct_fallback_allowed": {
+          "const": false
+        }
+      }
+    },
+    "read_privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["range_bucket_size", "separate_write_session"],
+      "properties": {
+        "range_bucket_size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "lookback_blocks": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "poll_interval_ms": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "separate_write_session": {
+          "const": true
+        },
+        "canonical_objects": {
+          "type": "boolean",
+          "default": false
+        },
+        "transaction_specific_queries_allowed": {
+          "type": "boolean",
+          "default": false
+        },
+        "transparent_local_scan": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "attestation_bundle_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "canonical_manifest_url": {
+      "type": "string",
+      "format": "uri"
+    }
+  }
+}
