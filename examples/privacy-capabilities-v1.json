@@ -1,0 +1,37 @@
+{
+  "capabilities_version": "1.0.0",
+  "service_id": "synthetic-offline-capabilities-service",
+  "network": "testnet",
+  "node": {
+    "implementation": "development",
+    "revision": "0123456789abcdef"
+  },
+  "supported_policy_versions": ["1.0.0"],
+  "private_write": {
+    "enabled": true,
+    "submission_protocols": ["ohttp-zcash-tx-v1"],
+    "release_modes": ["fixed_epoch"],
+    "maximum_transaction_bytes": 1000000,
+    "attestation": {
+      "supported": true,
+      "required": true
+    }
+  },
+  "read_privacy": {
+    "range_bucketing": {
+      "supported": true,
+      "bucket_sizes": [100, 200]
+    },
+    "canonical_objects": {
+      "supported": true
+    },
+    "mempool_epochs": {
+      "supported": true,
+      "epoch_ms": 60000
+    },
+    "separate_write_session": true,
+    "transparent_local_scan": false
+  },
+  "valid_from": "2026-01-01T00:00:00Z",
+  "valid_until": "2026-12-31T00:00:00Z"
+}
