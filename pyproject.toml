@@ -1,0 +1,45 @@
+[project]
+name = "zcash-privacy-stack"
+version = "0.1.0"
+description = "Cross-stack integration repository for the Zcash privacy project."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "basedpyright",
+  "pytest",
+  "ruff",
+]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-config --strict-markers"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["scripts", "tests"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["COM812", "CPY001", "D203", "D213"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["D", "S101"]
+"tests/git_fixture.py" = ["D", "S603", "S607"]
+"tests/test_check_components.py" = ["S603"]
+"tests/test_bootstrap.py" = ["S603"]
+"tests/test_inspect.py" = ["S603"]
+"scripts/component_git.py" = ["S603"]
+
+[tool.basedpyright]
+include = ["scripts", "tests"]
+extraPaths = ["."]
+pythonVersion = "3.11"
+typeCheckingMode = "all"
+reportAny = "error"
+reportExplicitAny = "error"
+reportUnnecessaryTypeIgnoreComment = "error"
+reportUnusedCallResult = "error"
