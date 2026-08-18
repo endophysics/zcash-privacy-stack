@@ -1,0 +1,37 @@
+{
+  "policy_version": "1.0.0",
+  "service_id": "synthetic-offline-policy-service",
+  "network": "testnet",
+  "valid_from": "2026-01-01T00:00:00Z",
+  "valid_until": "2026-12-31T00:00:00Z",
+  "node": {
+    "implementation": "development",
+    "revision": "0123456789abcdef",
+    "fixed_logical_egress": false
+  },
+  "private_write": {
+    "enabled": true,
+    "submission_protocol": "ohttp-zcash-tx-v1",
+    "padding_bytes": 4096,
+    "minimum_delay_ms": 100,
+    "maximum_delay_ms": 500,
+    "release_mode": "fixed_epoch",
+    "epoch_ms": 60000,
+    "relay_set_id": "synthetic-relay-set-v1",
+    "gateway_key_id": "synthetic-gateway-key-v1",
+    "attestation_required": true,
+    "direct_fallback_allowed": false
+  },
+  "read_privacy": {
+    "range_bucket_size": 100,
+    "lookback_blocks": 200,
+    "poll_interval_ms": 1000,
+    "mempool_epoch_ms": 60000,
+    "separate_write_session": true,
+    "canonical_objects": true,
+    "transaction_specific_queries_allowed": false,
+    "transparent_local_scan": false
+  },
+  "attestation_bundle_url": "urn:zcash:privacy-stack:example:attestation-bundle-v1",
+  "canonical_manifest_url": "urn:zcash:privacy-stack:example:canonical-read-manifest-v1"
+}

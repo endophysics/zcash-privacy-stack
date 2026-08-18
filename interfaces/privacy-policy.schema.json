@@ -1,22 +1,23 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/zcash-privacy/privacy-policy.schema.json",
+  "$id": "urn:zcash:privacy-stack:privacy-policy:1",
   "title": "Zcash Privacy Service Policy",
   "type": "object",
-  "additionalProperties": false,
+  "additionalProperties": true,
   "required": [
     "policy_version",
     "service_id",
     "network",
     "valid_from",
     "valid_until",
+    "node",
     "private_write",
     "read_privacy"
   ],
   "properties": {
     "policy_version": {
       "type": "string",
-      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
     },
     "service_id": {
       "type": "string",
@@ -37,8 +38,8 @@
     },
     "node": {
       "type": "object",
-      "additionalProperties": false,
-      "required": ["implementation", "revision"],
+      "additionalProperties": true,
+      "required": ["implementation", "revision", "fixed_logical_egress"],
       "properties": {
         "implementation": {
           "type": "string",
@@ -52,14 +53,13 @@
           "type": "string"
         },
         "fixed_logical_egress": {
-          "type": "boolean",
-          "default": true
+          "type": "boolean"
         }
       }
     },
     "private_write": {
       "type": "object",
-      "additionalProperties": false,
+      "additionalProperties": true,
       "required": [
         "enabled",
         "submission_protocol",
@@ -67,10 +67,15 @@
         "minimum_delay_ms",
         "maximum_delay_ms",
         "release_mode",
+        "relay_set_id",
+        "gateway_key_id",
+        "attestation_required",
         "direct_fallback_allowed"
       ],
       "properties": {
-        "enabled": {"type": "boolean"},
+        "enabled": {
+          "type": "boolean"
+        },
         "submission_protocol": {
           "type": "string",
           "enum": ["ohttp-zcash-tx-v1", "development-direct-v1"]
@@ -97,14 +102,15 @@
           "enum": ["immediate", "fixed_epoch", "rolling_pool"]
         },
         "relay_set_id": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "gateway_key_id": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "attestation_required": {
-          "type": "boolean",
-          "default": false
+          "type": "boolean"
         },
         "direct_fallback_allowed": {
           "const": false
@@ -113,8 +119,17 @@
     },
     "read_privacy": {
       "type": "object",
-      "additionalProperties": false,
-      "required": ["range_bucket_size", "separate_write_session"],
+      "additionalProperties": true,
+      "required": [
+        "range_bucket_size",
+        "lookback_blocks",
+        "poll_interval_ms",
+        "mempool_epoch_ms",
+        "separate_write_session",
+        "canonical_objects",
+        "transaction_specific_queries_allowed",
+        "transparent_local_scan"
+      ],
       "properties": {
         "range_bucket_size": {
           "type": "integer",
@@ -128,20 +143,21 @@
           "type": "integer",
           "minimum": 1
         },
+        "mempool_epoch_ms": {
+          "type": "integer",
+          "minimum": 1
+        },
         "separate_write_session": {
           "const": true
         },
         "canonical_objects": {
-          "type": "boolean",
-          "default": false
+          "type": "boolean"
         },
         "transaction_specific_queries_allowed": {
-          "type": "boolean",
-          "default": false
+          "const": false
         },
         "transparent_local_scan": {
-          "type": "boolean",
-          "default": false
+          "type": "boolean"
         }
       }
     },
@@ -153,5 +169,69 @@
       "type": "string",
       "format": "uri"
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "private_write": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["release_mode"],
+            "properties": {
+              "release_mode": {
+                "const": "fixed_epoch"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "private_write": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["epoch_ms"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "private_write": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["attestation_required"],
+            "properties": {
+              "attestation_required": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": ["attestation_bundle_url"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "read_privacy": {
+            "type": "object",
+            "required": ["canonical_objects"],
+            "properties": {
+              "canonical_objects": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": ["canonical_manifest_url"]
+      }
+    }
+  ]
 }
