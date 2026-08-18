@@ -20,6 +20,10 @@ workspace/
 just bootstrap
 just status
 just inspect
+just policy-example
+just policy-validate examples/privacy-policy-v1.json
+just policy-validate --check-freshness --at 2026-06-01T00:00:00Z examples/privacy-policy-v1.json
+just interface-summary
 ```
 
 `bootstrap` clones missing configured siblings and safely detaches them at their pins. It refuses dirty trees and mismatched remotes rather than resetting, cleaning, or force-checking out. `status` emits machine-readable component records. `inspect` adds the current WP00 boundary: Zakura checkout/status is the only inspection boundary, and no end-to-end service exists yet.
@@ -27,6 +31,12 @@ just inspect
 Unconfigured optional components are reported and skipped; they do not create repositories. Configured optional components retain their pin and are bootstrapped when present in the lock.
 
 No component is vendored here. Do not use Git submodules, subtrees, or optional-repository creation.
+
+## Offline Privacy Contract Commands
+
+`policy-example` emits the checked-in privacy-policy example with structured explanations. `policy-validate` validates a local privacy-policy JSON file using the local schema and semantic rules. Its default mode checks structure and semantics without freshness because the example has a bounded validity window. Add `--check-freshness --at RFC3339-UTC` for deterministic freshness validation, as shown above. `interface-summary` emits the static contract identifiers, version fields, and cross-contract concept metadata as structured JSON.
+
+These commands do not retrieve documents or schemas and do not establish document authenticity, authorization, signatures, or advertised behavior. A successful result only reports compatibility with the locally supported contract. See [interface versioning](docs/INTERFACE_VERSIONING.md) for independent version domains, stable identifiers, and additive compatibility, and [compatibility and adoption](docs/COMPATIBILITY_AND_ADOPTION.md) for adoption guidance.
 
 ## Local Verification
 
