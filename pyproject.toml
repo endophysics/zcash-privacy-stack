@@ -4,7 +4,11 @@ version = "0.1.0"
 description = "Cross-stack integration repository for the Zcash privacy project."
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "jsonschema[format-nongpl]>=4.26,<5",
+    "pydantic>=2.11,<3",
+    "typing-extensions>=4.12,<5",
+]
 
 [dependency-groups]
 dev = [
@@ -32,6 +36,7 @@ ignore = ["COM812", "CPY001", "D203", "D213"]
 "tests/test_check_components.py" = ["S603"]
 "tests/test_bootstrap.py" = ["S603"]
 "tests/test_inspect.py" = ["S603"]
+"tests/test_policy_commands.py" = ["S603"]
 "scripts/component_git.py" = ["S603"]
 
 [tool.basedpyright]
