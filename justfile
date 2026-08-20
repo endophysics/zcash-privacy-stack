@@ -7,6 +7,9 @@ status:
 inspect:
     cd "{{justfile_directory()}}" && ./scripts/inspect
 
+inspect-zakura:
+    cd "{{justfile_directory()}}" && uv run python -m scripts.inspect_zakura
+
 policy-example:
     cd "{{justfile_directory()}}" && uv run ./scripts/policy-example
 

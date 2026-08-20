@@ -36,6 +36,7 @@ ignore = ["COM812", "CPY001", "D203", "D213"]
 "tests/test_check_components.py" = ["S603"]
 "tests/test_bootstrap.py" = ["S603"]
 "tests/test_inspect.py" = ["S603"]
+"scripts/inspect_zakura.py" = ["S603"]
 "tests/test_policy_commands.py" = ["S603"]
 "scripts/component_git.py" = ["S603"]
 
