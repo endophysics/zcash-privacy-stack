@@ -3,8 +3,8 @@ format_version = 1
 [components.zakura]
 repository = "https://github.com/endophysics/zakura.git"
 upstream = "https://github.com/zakura-core/zakura.git"
-revision = "5140c6e23e7218133071e2e8b9e6d90e47a54e6c"
-upstream_base = "5140c6e23e7218133071e2e8b9e6d90e47a54e6c"
+revision = "11b3d9818f42eb8b4d06f6764ec50daaaa46694e"
+upstream_base = "a03dac8f6136962f749540919a183c9d182db52b"
 path = "../zakura"
 required = true
 
