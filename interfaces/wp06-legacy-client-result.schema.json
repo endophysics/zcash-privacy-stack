@@ -1,0 +1,324 @@
+{
+  "$defs": {
+    "CheckCode": {
+      "description": "Fixed compatibility checks that never carry unstructured evidence.",
+      "enum": [
+        "client_behavior",
+        "duplicate_release",
+        "release_deadline",
+        "direct_fallback",
+        "status_polling"
+      ],
+      "title": "CheckCode",
+      "type": "string"
+    },
+    "CheckRecord": {
+      "additionalProperties": false,
+      "description": "One typed check result without free-form evidence data.",
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/CheckCode"
+        },
+        "status": {
+          "$ref": "#/$defs/CheckStatus"
+        }
+      },
+      "required": [
+        "code",
+        "status"
+      ],
+      "title": "CheckRecord",
+      "type": "object"
+    },
+    "CheckStatus": {
+      "description": "Outcome for one fixed compatibility check.",
+      "enum": [
+        "pass",
+        "fail",
+        "not_run"
+      ],
+      "title": "CheckStatus",
+      "type": "string"
+    },
+    "Client": {
+      "description": "Supported legacy client lanes.",
+      "enum": [
+        "vizor",
+        "zodl-android",
+        "zodl-ios"
+      ],
+      "title": "Client",
+      "type": "string"
+    },
+    "EvidenceGrade": {
+      "description": "Strength and availability of the recorded evidence.",
+      "enum": [
+        "local_rust_unit",
+        "local_flutter_unavailable",
+        "source_derived",
+        "integrated_empirical",
+        "unavailable"
+      ],
+      "title": "EvidenceGrade",
+      "type": "string"
+    },
+    "Execution": {
+      "description": "Whether the selected evidence collection, including source review, completed.",
+      "enum": [
+        "complete",
+        "unavailable"
+      ],
+      "title": "Execution",
+      "type": "string"
+    },
+    "RolloutClassification": {
+      "description": "Conservative WP06 endpoint rollout classification.",
+      "enum": [
+        "ordinary_immediate_endpoint",
+        "private_endpoint_only",
+        "inconclusive",
+        "incompatible"
+      ],
+      "title": "RolloutClassification",
+      "type": "string"
+    },
+    "Scenario": {
+      "description": "WP06 compatibility scenarios in registry order.",
+      "enum": [
+        "temporary_public_absence",
+        "exact_retry",
+        "lost_response_retry",
+        "transaction_status_reconciliation",
+        "mempool_observation",
+        "server_switching",
+        "direct_fallback",
+        "node_restart",
+        "pre_release_conflict",
+        "release_deadline_preservation"
+      ],
+      "title": "Scenario",
+      "type": "string"
+    },
+    "TimelineEventCode": {
+      "description": "The seven human-inspection stages required by WP06.",
+      "enum": [
+        "submission_call",
+        "server_acceptance",
+        "client_visible_response",
+        "client_retries_or_status_queries",
+        "public_release",
+        "client_final_state",
+        "fallback_or_endpoint_change"
+      ],
+      "title": "TimelineEventCode",
+      "type": "string"
+    },
+    "TimelineRecord": {
+      "additionalProperties": false,
+      "description": "One typed WP06 timeline stage.",
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/TimelineEventCode"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "title": "TimelineRecord",
+      "type": "object"
+    },
+    "UnavailableReason": {
+      "description": "Stable unavailable states for planned WP06 adapter lanes.",
+      "enum": [
+        "vizor_checkout_unavailable",
+        "vizor_revision_mismatch",
+        "vizor_worktree_dirty",
+        "vizor_origin_mismatch",
+        "cargo_unavailable",
+        "flutter_toolchain_unavailable",
+        "managed_zcashd_unavailable_on_darwin_arm64"
+      ],
+      "title": "UnavailableReason",
+      "type": "string"
+    }
+  },
+  "$id": "urn:zcash:privacy-stack:wp06-legacy-client-result:1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "execution": {
+            "const": "unavailable"
+          }
+        },
+        "required": [
+          "execution"
+        ]
+      },
+      "then": {
+        "properties": {
+          "checks": {
+            "items": {
+              "properties": {
+                "status": {
+                  "const": "not_run"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            }
+          },
+          "rollout_classification": {
+            "const": "inconclusive"
+          },
+          "timeline": {
+            "maxItems": 0
+          },
+          "unavailable_reason": {
+            "not": {
+              "type": "null"
+            }
+          }
+        },
+        "required": [
+          "unavailable_reason"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "execution": {
+            "const": "complete"
+          }
+        },
+        "required": [
+          "execution"
+        ]
+      },
+      "then": {
+        "properties": {
+          "unavailable_reason": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evidence_grade": {
+            "enum": [
+              "local_flutter_unavailable",
+              "unavailable"
+            ]
+          }
+        },
+        "required": [
+          "evidence_grade"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution": {
+            "const": "unavailable"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evidence_grade": {
+            "enum": [
+              "local_rust_unit",
+              "source_derived"
+            ]
+          }
+        },
+        "required": [
+          "evidence_grade"
+        ]
+      },
+      "then": {
+        "properties": {
+          "rollout_classification": {
+            "not": {
+              "const": "private_endpoint_only"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "description": "The complete immutable WP06 result for one client-version scenario.",
+  "properties": {
+    "checks": {
+      "items": {
+        "$ref": "#/$defs/CheckRecord"
+      },
+      "minItems": 1,
+      "title": "Checks",
+      "type": "array"
+    },
+    "client": {
+      "$ref": "#/$defs/Client"
+    },
+    "client_release": {
+      "minLength": 1,
+      "title": "Client Release",
+      "type": "string"
+    },
+    "evidence_grade": {
+      "$ref": "#/$defs/EvidenceGrade"
+    },
+    "execution": {
+      "$ref": "#/$defs/Execution"
+    },
+    "format_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Format Version",
+      "type": "integer"
+    },
+    "rollout_classification": {
+      "$ref": "#/$defs/RolloutClassification"
+    },
+    "scenario": {
+      "$ref": "#/$defs/Scenario"
+    },
+    "timeline": {
+      "items": {
+        "$ref": "#/$defs/TimelineRecord"
+      },
+      "title": "Timeline",
+      "type": "array"
+    },
+    "unavailable_reason": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/UnavailableReason"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "client",
+    "client_release",
+    "scenario",
+    "evidence_grade",
+    "execution",
+    "rollout_classification",
+    "checks",
+    "timeline"
+  ],
+  "title": "WP06 Legacy Client Result",
+  "type": "object"
+}
