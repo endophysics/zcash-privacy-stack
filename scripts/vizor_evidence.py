@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from enum import StrEnum, unique
 from typing import Final
 
-from scripts.wp06_legacy_client_contract import Scenario
+from scripts.legacy_client_contract import Scenario
 
 
 @unique
@@ -22,7 +22,7 @@ class VizorEvidenceClaim(StrEnum):
 
 @dataclass(frozen=True, slots=True)
 class VizorRustEvidence:
-    """Exact Rust test and the WP06 scenarios it grounds."""
+    """Exact Rust test and the compatibility scenarios it grounds."""
 
     test_name: str
     scenarios: tuple[Scenario, ...]

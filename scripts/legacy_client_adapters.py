@@ -1,10 +1,10 @@
-"""Pinned WP06 evidence adapters for Vizor and Zodl clients."""
+"""Pinned evidence adapters for Vizor and Zodl clients."""
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal
 
-from scripts.wp06_legacy_client_adapter_runtime import (
+from scripts.legacy_client_adapter_runtime import (
     VIZOR_PIN,
     ZODL_ANDROID_PIN,
     ZODL_IOS_PIN,
@@ -12,7 +12,7 @@ from scripts.wp06_legacy_client_adapter_runtime import (
     ClientPin,
     run_vizor_cargo_evidence,
 )
-from scripts.wp06_legacy_client_contract import (
+from scripts.legacy_client_contract import (
     SCENARIO_REGISTRY,
     CheckCode,
     CheckRecord,
@@ -27,7 +27,7 @@ from scripts.wp06_legacy_client_contract import (
     TimelineRecord,
     UnavailableReason,
 )
-from scripts.wp06_zodl_source_evidence import (
+from scripts.zodl_source_evidence import (
     ZODL_ANDROID_SOURCE_MAPPING,
     ZODL_IOS_SOURCE_MAPPING,
     ZodlScenarioMapping,

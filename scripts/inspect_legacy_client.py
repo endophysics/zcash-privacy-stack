@@ -1,4 +1,4 @@
-"""WP06 legacy-client inspection CLI."""
+"""Legacy-client inspection CLI."""
 
 from __future__ import annotations
 
@@ -11,13 +11,13 @@ from typing import Final, TextIO, TypeAlias
 
 from typing_extensions import override
 
-from scripts.wp06_legacy_client_adapter_runtime import AdapterError, default_runtime
-from scripts.wp06_legacy_client_adapters import (
+from scripts.legacy_client_adapter_runtime import AdapterError, default_runtime
+from scripts.legacy_client_adapters import (
     build_vizor_results,
     build_zodl_android_results,
     build_zodl_ios_results,
 )
-from scripts.wp06_legacy_client_contract import (
+from scripts.legacy_client_contract import (
     Client,
     Execution,
     LegacyClientResult,
@@ -83,7 +83,7 @@ class Console:
 
 def default_vizor_checkout(script_path: Path) -> Path:
     """Find Vizor beside the integration repository without using cwd."""
-    return script_path.resolve().parents[3] / "vizor-wallet"
+    return script_path.resolve().parents[2] / "vizor-wallet"
 
 
 def parse_request(arguments: Sequence[str]) -> InspectionRequest:
@@ -151,7 +151,7 @@ def build_results(client: Client, checkout: Path) -> tuple[LegacyClientResult, .
 
 def run_inspection(request: InspectionRequest, console: Console, builder: ResultBuilder) -> int:
     """Build every result before writing either supported output format."""
-    checkout = request.vizor_checkout or default_vizor_checkout(SCRIPT_PATH)
+    checkout = (request.vizor_checkout or default_vizor_checkout(SCRIPT_PATH)).resolve()
     try:
         results = builder(request.client, checkout)
     except AdapterError as error:

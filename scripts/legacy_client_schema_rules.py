@@ -1,4 +1,4 @@
-"""Typed schema and input rules for the WP06 result contract."""
+"""Typed schema and input rules for the legacy-client result contract."""
 
 from __future__ import annotations
 

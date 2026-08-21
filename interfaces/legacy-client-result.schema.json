@@ -72,7 +72,7 @@
       "type": "string"
     },
     "RolloutClassification": {
-      "description": "Conservative WP06 endpoint rollout classification.",
+      "description": "Conservative endpoint rollout classification.",
       "enum": [
         "ordinary_immediate_endpoint",
         "private_endpoint_only",
@@ -83,7 +83,7 @@
       "type": "string"
     },
     "Scenario": {
-      "description": "WP06 compatibility scenarios in registry order.",
+      "description": "Compatibility scenarios in registry order.",
       "enum": [
         "temporary_public_absence",
         "exact_retry",
@@ -100,7 +100,7 @@
       "type": "string"
     },
     "TimelineEventCode": {
-      "description": "The seven human-inspection stages required by WP06.",
+      "description": "The seven required human-inspection stages.",
       "enum": [
         "submission_call",
         "server_acceptance",
@@ -115,7 +115,7 @@
     },
     "TimelineRecord": {
       "additionalProperties": false,
-      "description": "One typed WP06 timeline stage.",
+      "description": "One typed compatibility timeline stage.",
       "properties": {
         "code": {
           "$ref": "#/$defs/TimelineEventCode"
@@ -128,7 +128,7 @@
       "type": "object"
     },
     "UnavailableReason": {
-      "description": "Stable unavailable states for planned WP06 adapter lanes.",
+      "description": "Stable unavailable states for planned adapter lanes.",
       "enum": [
         "vizor_checkout_unavailable",
         "vizor_revision_mismatch",
@@ -142,7 +142,7 @@
       "type": "string"
     }
   },
-  "$id": "urn:zcash:privacy-stack:wp06-legacy-client-result:1",
+  "$id": "urn:zcash:privacy-stack:legacy-client-result:1",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "allOf": [
@@ -254,7 +254,7 @@
       }
     }
   ],
-  "description": "The complete immutable WP06 result for one client-version scenario.",
+  "description": "The complete immutable result for one client-version scenario.",
   "properties": {
     "checks": {
       "items": {
@@ -319,6 +319,6 @@
     "checks",
     "timeline"
   ],
-  "title": "WP06 Legacy Client Result",
+  "title": "Legacy Client Result",
   "type": "object"
 }

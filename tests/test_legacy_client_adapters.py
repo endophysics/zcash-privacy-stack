@@ -4,7 +4,7 @@ from collections import Counter
 from typing import TYPE_CHECKING
 
 import pytest
-from scripts.wp06_legacy_client_adapter_runtime import (
+from scripts.legacy_client_adapter_runtime import (
     VIZOR_PIN,
     ZODL_ANDROID_PIN,
     ZODL_IOS_PIN,
@@ -12,12 +12,12 @@ from scripts.wp06_legacy_client_adapter_runtime import (
     AdapterErrorCode,
     AdapterRuntime,
 )
-from scripts.wp06_legacy_client_adapters import (
+from scripts.legacy_client_adapters import (
     build_vizor_results,
     build_zodl_android_results,
     build_zodl_ios_results,
 )
-from scripts.wp06_legacy_client_contract import (
+from scripts.legacy_client_contract import (
     SCENARIO_REGISTRY,
     CheckCode,
     CheckStatus,
@@ -29,9 +29,9 @@ from scripts.wp06_legacy_client_contract import (
     Scenario,
     UnavailableReason,
 )
-from scripts.wp06_vizor_evidence import VIZOR_RUST_EVIDENCE_REGISTRY
+from scripts.vizor_evidence import VIZOR_RUST_EVIDENCE_REGISTRY
 
-from tests.wp06_adapter_fakes import FakeCheckoutState, FixedToolProbe, RecordingRunner
+from tests.legacy_client_adapter_fakes import FakeCheckoutState, FixedToolProbe, RecordingRunner
 
 if TYPE_CHECKING:
     from pathlib import Path

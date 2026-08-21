@@ -3,11 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
-from scripts.wp06_legacy_client_adapters import (
+from scripts.legacy_client_adapters import (
     build_zodl_android_results,
     build_zodl_ios_results,
 )
-from scripts.wp06_legacy_client_contract import (
+from scripts.legacy_client_contract import (
     CheckCode,
     CheckStatus,
     Client,

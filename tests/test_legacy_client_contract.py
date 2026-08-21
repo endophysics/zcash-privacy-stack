@@ -7,7 +7,7 @@ from typing import Final
 import pytest
 from jsonschema import Draft202012Validator
 from pydantic import JsonValue, ValidationError
-from scripts.wp06_legacy_client_contract import (
+from scripts.legacy_client_contract import (
     SCENARIO_REGISTRY,
     CheckCode,
     CheckRecord,
@@ -27,7 +27,7 @@ from scripts.wp06_legacy_client_contract import (
 from tests.privacy_json import load_json_document
 
 PROJECT_ROOT: Final = Path(__file__).parents[1]
-SCHEMA_PATH: Final = PROJECT_ROOT / "interfaces" / "wp06-legacy-client-result.schema.json"
+SCHEMA_PATH: Final = PROJECT_ROOT / "interfaces" / "legacy-client-result.schema.json"
 
 
 def valid_result() -> LegacyClientResult:
@@ -217,7 +217,7 @@ def test_checked_in_schema_is_draft_2020_12_and_matches_model() -> None:
     schema = load_json_document(SCHEMA_PATH)
 
     assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
-    assert schema["$id"] == "urn:zcash:privacy-stack:wp06-legacy-client-result:1"
+    assert schema["$id"] == "urn:zcash:privacy-stack:legacy-client-result:1"
     Draft202012Validator.check_schema(schema)
     assert schema == LegacyClientResult.model_json_schema()
 

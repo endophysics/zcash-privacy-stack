@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from scripts.wp06_legacy_client_adapter_runtime import CommandOutput
+from scripts.legacy_client_adapter_runtime import CommandOutput
 
 if TYPE_CHECKING:
     from pathlib import Path

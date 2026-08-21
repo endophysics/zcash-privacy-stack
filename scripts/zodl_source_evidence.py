@@ -1,11 +1,11 @@
-"""Pinned Zodl wallet-release source evidence for WP06."""
+"""Pinned Zodl wallet-release source evidence."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Final
 
-from scripts.wp06_legacy_client_contract import CheckCode, CheckStatus, Scenario
+from scripts.legacy_client_contract import CheckCode, CheckStatus, Scenario
 
 
 @dataclass(frozen=True, slots=True)

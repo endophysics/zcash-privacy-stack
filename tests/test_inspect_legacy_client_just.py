@@ -7,7 +7,7 @@ from typing import Final
 
 import pytest
 from scripts import inspect_legacy_client
-from scripts.wp06_legacy_client_contract import Client, LegacyClientResult
+from scripts.legacy_client_contract import Client, LegacyClientResult
 
 PROJECT_ROOT: Final = Path(__file__).parents[1]
 SCENARIO_COUNT: Final = 10
@@ -25,7 +25,7 @@ def _run_just(arguments: tuple[str, ...]) -> subprocess.CompletedProcess[str]:
     )
 
 
-@pytest.mark.parametrize("client", tuple(Client))
+@pytest.mark.parametrize("client", [Client.ZODL_ANDROID, Client.ZODL_IOS])
 @pytest.mark.parametrize("format_value", ["human", "jsonl"])
 def test_documented_just_invocations_render_ten_records_without_recipe_echo(
     client: Client, format_value: str

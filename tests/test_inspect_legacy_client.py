@@ -7,24 +7,24 @@ from typing import Final
 
 import pytest
 from scripts import inspect_legacy_client
-from scripts.wp06_legacy_client_adapter_runtime import (
+from scripts.legacy_client_adapter_runtime import (
     VIZOR_PIN,
     AdapterError,
     AdapterErrorCode,
     AdapterRuntime,
 )
-from scripts.wp06_legacy_client_adapters import (
+from scripts.legacy_client_adapters import (
     build_vizor_results,
     build_zodl_android_results,
     build_zodl_ios_results,
 )
-from scripts.wp06_legacy_client_contract import (
+from scripts.legacy_client_contract import (
     SCENARIO_REGISTRY,
     Client,
     LegacyClientResult,
 )
 
-from tests.wp06_adapter_fakes import FakeCheckoutState, FixedToolProbe, RecordingRunner
+from tests.legacy_client_adapter_fakes import FakeCheckoutState, FixedToolProbe, RecordingRunner
 
 PROJECT_ROOT: Final = Path(__file__).parents[1]
 VALID_STATE: Final = FakeCheckoutState(revision=VIZOR_PIN.revision, origin=VIZOR_PIN.repository)
@@ -144,13 +144,12 @@ def test_invalid_client_or_format_is_rejected(arguments: tuple[str, ...]) -> Non
         _ = inspect_legacy_client.parse_request(arguments)
 
 
-def test_default_vizor_checkout_uses_zcash_level_sibling_not_privup_level_sibling() -> None:
+def test_default_vizor_checkout_uses_repository_sibling() -> None:
     checkout = inspect_legacy_client.default_vizor_checkout(
         PROJECT_ROOT / "scripts" / "inspect_legacy_client.py"
     )
 
-    assert checkout == PROJECT_ROOT.parents[1] / "vizor-wallet"
-    assert checkout != PROJECT_ROOT.parent / "vizor-wallet"
+    assert checkout == PROJECT_ROOT.parent / "vizor-wallet"
 
 
 def test_default_vizor_checkout_uses_actual_module_script_path_independent_of_cwd(
@@ -160,8 +159,33 @@ def test_default_vizor_checkout_uses_actual_module_script_path_independent_of_cw
 
     checkout = inspect_legacy_client.default_vizor_checkout(inspect_legacy_client.SCRIPT_PATH)
 
-    assert checkout == PROJECT_ROOT.parents[1] / "vizor-wallet"
-    assert checkout != PROJECT_ROOT.parent / "vizor-wallet"
+    assert checkout == PROJECT_ROOT.parent / "vizor-wallet"
+
+
+def test_relative_vizor_checkout_is_resolved_before_building(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    observed: list[Path] = []
+
+    def capture(client: Client, checkout: Path) -> tuple[LegacyClientResult, ...]:
+        observed.append(checkout)
+        return _fixture_results(client, checkout)
+
+    request = inspect_legacy_client.InspectionRequest(
+        Client.VIZOR,
+        inspect_legacy_client.OutputFormat.JSONL,
+        Path("relative-vizor"),
+    )
+
+    exit_code = inspect_legacy_client.run_inspection(
+        request,
+        inspect_legacy_client.Console(StringIO(), StringIO()),
+        capture,
+    )
+
+    assert exit_code == 0
+    assert observed == [tmp_path / "relative-vizor"]
 
 
 @pytest.mark.parametrize("client", tuple(Client))

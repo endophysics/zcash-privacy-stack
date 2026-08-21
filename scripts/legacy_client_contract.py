@@ -1,4 +1,4 @@
-"""Strict, identifier-free WP06 legacy-client compatibility results."""
+"""Strict, identifier-free legacy-client compatibility results."""
 
 from __future__ import annotations
 
@@ -8,13 +8,13 @@ from typing import Annotated, ClassVar, Final, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from .wp06_contract_schema_rules import (
+from .legacy_client_schema_rules import (
     FORMAT_VERSION_BEFORE_VALIDATOR,
     LEGACY_CLIENT_RESULT_SCHEMA_RULES,
 )
 
-SCHEMA_ID: Final = "urn:zcash:privacy-stack:wp06-legacy-client-result:1"
-SCHEMA_TITLE: Final = "WP06 Legacy Client Result"
+SCHEMA_ID: Final = "urn:zcash:privacy-stack:legacy-client-result:1"
+SCHEMA_TITLE: Final = "Legacy Client Result"
 NonEmptyString = Annotated[str, Field(min_length=1)]
 
 
@@ -29,7 +29,7 @@ class Client(StrEnum):
 
 @unique
 class Scenario(StrEnum):
-    """WP06 compatibility scenarios in registry order."""
+    """Compatibility scenarios in registry order."""
 
     TEMPORARY_PUBLIC_ABSENCE = "temporary_public_absence"
     EXACT_RETRY = "exact_retry"
@@ -59,7 +59,7 @@ class EvidenceGrade(StrEnum):
 
 @unique
 class UnavailableReason(StrEnum):
-    """Stable unavailable states for planned WP06 adapter lanes."""
+    """Stable unavailable states for planned adapter lanes."""
 
     VIZOR_CHECKOUT_UNAVAILABLE = "vizor_checkout_unavailable"
     VIZOR_REVISION_MISMATCH = "vizor_revision_mismatch"
@@ -80,7 +80,7 @@ class Execution(StrEnum):
 
 @unique
 class RolloutClassification(StrEnum):
-    """Conservative WP06 endpoint rollout classification."""
+    """Conservative endpoint rollout classification."""
 
     ORDINARY_IMMEDIATE_ENDPOINT = "ordinary_immediate_endpoint"
     PRIVATE_ENDPOINT_ONLY = "private_endpoint_only"
@@ -110,7 +110,7 @@ class CheckStatus(StrEnum):
 
 @unique
 class TimelineEventCode(StrEnum):
-    """The seven human-inspection stages required by WP06."""
+    """The seven required human-inspection stages."""
 
     SUBMISSION_CALL = "submission_call"
     SERVER_ACCEPTANCE = "server_acceptance"
@@ -156,13 +156,13 @@ class CheckRecord(_ContractRecord):
 
 
 class TimelineRecord(_ContractRecord):
-    """One typed WP06 timeline stage."""
+    """One typed compatibility timeline stage."""
 
     code: TimelineEventCode
 
 
 class LegacyClientResult(_ContractRecord):
-    """The complete immutable WP06 result for one client-version scenario."""
+    """The complete immutable result for one client-version scenario."""
 
     model_config: ClassVar[ConfigDict] = ConfigDict(
         frozen=True,

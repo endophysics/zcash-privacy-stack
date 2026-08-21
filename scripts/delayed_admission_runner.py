@@ -1,4 +1,4 @@
-"""Representative deterministic WP06 automation, not client or integrated empirical evidence."""
+"""Representative deterministic automation, not client or integrated empirical evidence."""
 
 from __future__ import annotations
 
@@ -45,7 +45,7 @@ class AdmissionRequest:
 
 @dataclass(frozen=True, slots=True)
 class RepresentativeDelayedAdmission:
-    """Immutable local state for representative-only WP06 invariant checks."""
+    """Immutable local state for representative-only invariant checks."""
 
     first_admission: AdmissionRequest
     state: AdmissionState

@@ -4,7 +4,7 @@ import sys
 from typing import TYPE_CHECKING
 
 import pytest
-from scripts.wp06_legacy_client_adapter_runtime import (
+from scripts.legacy_client_adapter_runtime import (
     VIZOR_PIN,
     AdapterError,
     AdapterErrorCode,
@@ -13,10 +13,10 @@ from scripts.wp06_legacy_client_adapter_runtime import (
     SubprocessCommandRunner,
     run_vizor_cargo_evidence,
 )
-from scripts.wp06_legacy_client_contract import Scenario
-from scripts.wp06_vizor_evidence import VIZOR_RUST_EVIDENCE_REGISTRY, VizorEvidenceClaim
+from scripts.legacy_client_contract import Scenario
+from scripts.vizor_evidence import VIZOR_RUST_EVIDENCE_REGISTRY, VizorEvidenceClaim
 
-from tests.wp06_adapter_fakes import FakeCheckoutState, FixedToolProbe, RecordingRunner
+from tests.legacy_client_adapter_fakes import FakeCheckoutState, FixedToolProbe, RecordingRunner
 
 if TYPE_CHECKING:
     from pathlib import Path

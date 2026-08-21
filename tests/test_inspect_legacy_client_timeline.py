@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from scripts import inspect_legacy_client
-from scripts.wp06_legacy_client_contract import (
+from scripts.legacy_client_contract import (
     SCENARIO_REGISTRY,
     Client,
     Scenario,

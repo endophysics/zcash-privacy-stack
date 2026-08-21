@@ -1,4 +1,4 @@
-"""Strict local runtime for the Vizor WP06 evidence adapter."""
+"""Strict local runtime for the Vizor evidence adapter."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Final, Protocol
 
 from typing_extensions import override
 
-from scripts.wp06_vizor_evidence import (
+from scripts.vizor_evidence import (
     VIZOR_RUST_EVIDENCE_REGISTRY,
 )
 

@@ -1,8 +1,8 @@
-# WP06 Legacy Client Compatibility
+# Legacy Client Compatibility
 
 ## Scope and conclusion
 
-WP06 evaluated these immutable wallet releases:
+This report evaluates these immutable wallet releases:
 
 | Client | Release | Commit |
 |---|---|---|
@@ -24,11 +24,11 @@ The evidence does not authorize delayed admission for any release. Ordinary imme
 
 ## Output and validation contract
 
-The `just inspect-legacy-client CLIENT=...` recipe accepts the documented `CLIENT=vizor`, `CLIENT=zodl-android`, or `CLIENT=zodl-ios` syntax and the optional `FORMAT=human` or `FORMAT=jsonl` syntax. It safely shell-quotes both recipe values before passing them to the CLI, so shell metacharacters remain inert invalid arguments rather than commands. Vizor defaults to `../../vizor-wallet` from `zcash-privacy-stack`, equivalent to `../vizor-wallet` from `privup`; direct CLI `--vizor-checkout` overrides nonstandard layouts.
+The `just inspect-legacy-client CLIENT=...` recipe accepts the documented `CLIENT=vizor`, `CLIENT=zodl-android`, or `CLIENT=zodl-ios` syntax and the optional `FORMAT=human` or `FORMAT=jsonl` syntax. It safely shell-quotes both recipe values before passing them to the CLI, so shell metacharacters remain inert invalid arguments rather than commands. Vizor defaults to the sibling checkout at `../vizor-wallet`; direct CLI `--vizor-checkout` overrides nonstandard layouts.
 
 Human output always renders the same seven authoritative stages for every scenario: submission call, server acceptance, client-visible response, client retry or status query, public release, client final state, and fallback or endpoint change. Each stage is exactly `observed`, `not_observed`, or `not_run`. `observed` records only a stage present in collected evidence, `not_observed` records its absence from completed evidence, and `not_run` marks unavailable execution. Every unavailable scenario also emits its stable typed `unavailable_reason`. No timeline stage is inferred from source review or unavailable execution.
 
-JSONL records validate against the checked [`wp06-legacy-client-result.schema.json`](../interfaces/wp06-legacy-client-result.schema.json). The schema is generated from and checked for equality with the Pydantic model. It mirrors the semantic invariants: `checks` is nonempty; unavailable execution requires a typed reason, only `NOT_RUN` checks, an empty timeline, and `inconclusive` rollout; complete execution forbids an unavailable reason; unavailable evidence requires unavailable execution; and `local_rust_unit` or `source_derived` evidence cannot authorize `private_endpoint_only`.
+JSONL records validate against the checked [`legacy-client-result.schema.json`](../interfaces/legacy-client-result.schema.json). The schema is generated from and checked for equality with the Pydantic model. It mirrors the semantic invariants: `checks` is nonempty; unavailable execution requires a typed reason, only `NOT_RUN` checks, an empty timeline, and `inconclusive` rollout; complete execution forbids an unavailable reason; unavailable evidence requires unavailable execution; and `local_rust_unit` or `source_derived` evidence cannot authorize `private_endpoint_only`.
 
 ## Vizor matrix
 
@@ -115,11 +115,11 @@ SDK-only behavior is therefore excluded from wallet-release evidence. No behavio
 - `private_endpoint_only`: not authorized. It requires future integrated empirical evidence for the pinned client and endpoint behavior.
 - Opt-in legacy endpoint batching: unsupported.
 
-WP06 does not establish a safe numeric delay. No cross-stack ADR is created until integrated empirical evidence exists.
+The available evidence does not establish a safe numeric delay. No cross-stack ADR is created until integrated empirical evidence exists.
 
 ## Representative delayed-admission automation
 
-[`scripts/wp06_delayed_admission_runner.py`](../scripts/wp06_delayed_admission_runner.py) is deterministic representative-only automation. Its typed local state proves these model invariants:
+[`scripts/delayed_admission_runner.py`](../scripts/delayed_admission_runner.py) is deterministic representative-only automation. Its typed local state proves these model invariants:
 
 - an exact retry is idempotent;
 - repeated release calls cannot duplicate release;
@@ -147,4 +147,6 @@ just inspect-legacy-client CLIENT=zodl-android FORMAT=jsonl
 just inspect-legacy-client CLIENT=zodl-ios FORMAT=jsonl
 ```
 
-The JSONL contract is [`interfaces/wp06-legacy-client-result.schema.json`](../interfaces/wp06-legacy-client-result.schema.json). Vizor inspection also requires the clean sibling checkout at the pinned commit, discovers each exact named test, and runs it with locked offline Cargo before producing records. Zodl commands render the pinned source-review matrices and do not run either wallet.
+The JSONL contract is [`interfaces/legacy-client-result.schema.json`](../interfaces/legacy-client-result.schema.json). Vizor inspection also requires the clean sibling checkout at the pinned commit, discovers each exact named test, and runs it with locked offline Cargo before producing records. Zodl commands render the pinned source-review matrices and do not run either wallet.
+
+For a reproducible Linux toolchain and an immutable Vizor checkout, run `just container-test`. It pins Python, `uv`, `just`, Rust, and the Vizor Git revision, then runs the full Python quality gates and exact offline Cargo evidence tests. `just container-inspect-legacy-client CLIENT=... FORMAT=...` renders records from the same image without relying on host toolchains or a mutable sibling checkout.

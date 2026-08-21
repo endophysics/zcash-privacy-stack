@@ -1,8 +1,8 @@
-"""Tests for representative WP06 automation, not client or integrated empirical evidence."""
+"""Tests for representative automation, not client or integrated empirical evidence."""
 
 from __future__ import annotations
 
-from scripts.wp06_delayed_admission_runner import (
+from scripts.delayed_admission_runner import (
     AdmissionRequest,
     AdmissionState,
     DeadlineObservation,

@@ -23,6 +23,8 @@ just inspect
 just inspect-zakura
 just inspect-legacy-client CLIENT=vizor
 just inspect-legacy-client CLIENT=zodl-android FORMAT=jsonl
+just container-test
+just container-inspect-legacy-client CLIENT=vizor
 just policy-example
 just policy-validate examples/privacy-policy-v1.json
 just policy-validate --check-freshness --at 2026-06-01T00:00:00Z examples/privacy-policy-v1.json
@@ -33,7 +35,7 @@ just interface-summary
 
 `inspect-zakura` is the local acceptance observer. It prints a stable identity preamble containing the pinned node commit, upstream base, managed-zcashd P2P observer, and host, then delegates directly to Zakura's `just inspect-private-release` recipe from the pinned, clean Zakura checkout. Zakura streams an identifier-free transcript containing the policy hash, exact release configuration, numeric private/public mempool counts, connected zcashd P2P observer event, and coarse transaction timeline. The wrapper does not duplicate that orchestration or parse and restate its output.
 
-`inspect-legacy-client` prints the ordered WP06 ten-scenario matrix for `vizor`, `zodl-android`, or `zodl-ios`. The recipe accepts the documented `CLIENT=...` and optional `FORMAT=...` syntax and safely shell-quotes both values before invoking the CLI. Vizor defaults to `../../vizor-wallet` from `zcash-privacy-stack`, equivalent to `../vizor-wallet` from `privup`; direct CLI `--vizor-checkout` overrides nonstandard layouts. Human output is the default; set `FORMAT=jsonl` for records validated against [`interfaces/wp06-legacy-client-result.schema.json`](interfaces/wp06-legacy-client-result.schema.json). Human records render all seven authoritative timeline stages as `observed`, `not_observed`, or `not_run`; unavailable records also include a stable reason. The checked schema mirrors the Pydantic semantic invariants, including nonempty checks and evidence/rollout restrictions. Ordinary immediate submission is the universal safe operational fallback and recommendation for every evaluated release; this is distinct from each scenario's machine `rollout_classification`. Completed directly supported Vizor unit scenarios may record `ordinary_immediate_endpoint`, while unavailable and source-derived non-empirical rows remain `inconclusive`. `inconclusive` never authorizes delay and therefore falls back operationally to immediate submission. See [WP06 legacy-client compatibility](docs/LEGACY_CLIENT_COMPATIBILITY.md) for exact pins, fail-closed Vizor execution, representative-only automation limits, immutable source links, and rollout guidance.
+`inspect-legacy-client` prints the ordered ten-scenario matrix for `vizor`, `zodl-android`, or `zodl-ios`. The recipe accepts the documented `CLIENT=...` and optional `FORMAT=...` syntax and safely shell-quotes both values before invoking the CLI. Vizor defaults to the sibling checkout at `../vizor-wallet`; direct CLI `--vizor-checkout` overrides nonstandard layouts. Human output is the default; set `FORMAT=jsonl` for records validated against [`interfaces/legacy-client-result.schema.json`](interfaces/legacy-client-result.schema.json). Human records render all seven authoritative timeline stages as `observed`, `not_observed`, or `not_run`; unavailable records also include a stable reason. The checked schema mirrors the Pydantic semantic invariants, including nonempty checks and evidence/rollout restrictions. Ordinary immediate submission is the universal safe operational fallback and recommendation for every evaluated release; this is distinct from each scenario's machine `rollout_classification`. Completed directly supported Vizor unit scenarios may record `ordinary_immediate_endpoint`, while unavailable and source-derived non-empirical rows remain `inconclusive`. `inconclusive` never authorizes delay and therefore falls back operationally to immediate submission. See [legacy-client compatibility](docs/LEGACY_CLIENT_COMPATIBILITY.md) for exact pins, fail-closed Vizor execution, representative-only automation limits, immutable source links, and rollout guidance.
 
 The observer accepts either a detached checkout or an attached branch when `HEAD` exactly matches the pin and the worktree is clean. `bootstrap` and `status` retain their stricter remote and detached-HEAD invariants. To vary local inspection timing, set `TEST_ZCASHD_COMPAT_PRIVATE_RELEASE_EPOCH_MS`, `TEST_ZCASHD_COMPAT_PRIVATE_RELEASE_MINIMUM_DELAY_MS`, and `TEST_ZCASHD_COMPAT_PRIVATE_RELEASE_MAXIMUM_DELAY_MS`; Zakura validates the values and prints the resulting policy and timing records.
 
@@ -60,5 +62,7 @@ uv run pytest
 uv run ruff check .
 uv run basedpyright
 ```
+
+`container-test` builds a pinned Linux environment with Python 3.11, `uv` 0.12.5, `just` 1.58.0, Rust 1.97.0, and the exact Vizor revision. The image runs the Python suite, Ruff, Basedpyright, and the fail-closed Vizor Cargo evidence tests. `container-inspect-legacy-client` uses the same image, so report generation does not depend on host-installed language toolchains or a mutable local Vizor checkout.
 
 Cross-stack ADRs are stored in `docs/adr/`. Component-local decisions are stored with component code.

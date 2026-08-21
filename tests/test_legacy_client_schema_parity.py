@@ -8,7 +8,7 @@ import pytest
 from jsonschema import Draft202012Validator, validate
 from jsonschema import ValidationError as JsonSchemaValidationError
 from pydantic import JsonValue, ValidationError
-from scripts.wp06_legacy_client_contract import (
+from scripts.legacy_client_contract import (
     CheckCode,
     CheckRecord,
     CheckStatus,
@@ -29,7 +29,7 @@ PythonPayloadValue: TypeAlias = JsonValue | tuple[CheckRecord, ...] | tuple[Time
 PythonPayload: TypeAlias = dict[str, PythonPayloadValue]
 
 PROJECT_ROOT: Final = Path(__file__).parents[1]
-SCHEMA_PATH: Final = PROJECT_ROOT / "interfaces" / "wp06-legacy-client-result.schema.json"
+SCHEMA_PATH: Final = PROJECT_ROOT / "interfaces" / "legacy-client-result.schema.json"
 SCHEMA: Final = load_json_document(SCHEMA_PATH)
 PROHIBITED_FIELDS: Final = (
     "transaction_id",
